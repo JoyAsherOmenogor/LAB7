@@ -1,50 +1,62 @@
-import sqlite3
-from faker import Faker
-from datetime import datetime
-
-# Create a faker object for generating fake data
-fake = Faker()
-
-# Open a connection to the database
-con = sqlite3.connect('social_network.db')
-cur = con.cursor()
-
-# Create the people table if it doesn't exist
-create_ppl_tbl_query = """
-CREATE TABLE IF NOT EXISTS people
-(
-    id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    address TEXT NOT NULL,
-    city TEXT NOT NULL,
-    province TEXT NOT NULL,
-    bio TEXT,
-    age INTEGER,
-    created_at DATETIME NOT NULL,
-    updated_at DATETIME NOT NULL
-);
 """
-cur.execute(create_ppl_tbl_query)
+Description:
+Prints the name and age of all people in the Social Network database
+who are age 50 or older, and saves the information to a CSV file.
 
-# Generate and insert fake data into the people table
-for _ in range(200):
-    name = fake.name()
-    email = fake.email()
-    address = fake.address()
-    city = fake.city()
-    province = fake.state()
-    bio = fake.text()
-    age = fake.random_int(min=1, max=100)
-    created_at = datetime.now()
-    updated_at = datetime.now()
+Usage:
+python old_people.py
+"""
 
-    add_person_query = """
-    INSERT INTO people (name, email, address, city, province, bio, age, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+import os
+import sqlite3
+import pandas as pd
+from create_db import db_path, script_dir
+
+def main():
+    old_people_list = get_old_people()
+    print_name_and_age(old_people_list)
+
+    old_people_csv = os.path.join(script_dir, 'old_people.csv')
+    save_name_and_age_to_csv(old_people_list, old_people_csv)
+
+def get_old_people():
+    """Queries the Social Network database for all people who are at least 50 years old.
+
+    Returns:
+        list: (name, age) of old people 
     """
-    cur.execute(add_person_query, (name, email, address, city, province, bio, age, created_at, updated_at))
+    con = sqlite3.connect(db_path)
+    cur = con.cursor()
 
-# Commit the changes and close the connection
-con.commit()
-con.close()
+    # Execute the SQL query to get old people (age >= 50)
+    cur.execute("SELECT name, age FROM people WHERE age >= 50")
+
+    # Fetch all query results
+    old_people_list = cur.fetchall()
+
+    con.close()
+
+    return old_people_list
+
+def print_name_and_age(name_and_age_list):
+    """Prints name and age of all people in provided list
+
+    Args:
+        name_and_age_list (list): (name, age) of people
+    """
+    for person in name_and_age_list:
+        name, age = person
+        print(f"{name} is {age} years old.")
+
+def save_name_and_age_to_csv(name_and_age_list, csv_path):
+    """Saves name and age of all people in provided list
+
+    Args:
+        name_and_age_list (list): (name, age) of people
+        csv_path (str): Path of CSV file
+    """
+    df = pd.DataFrame(name_and_age_list, columns=['Name', 'Age'])
+    df.to_csv(csv_path, index=False)
+
+if __name__ == '__main__':
+   main()
