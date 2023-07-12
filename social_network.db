@@ -1,0 +1,26 @@
+import sqlite3
+import pandas as pd
+
+# Open a connection to the database
+con = sqlite3.connect('social_network.db')
+cur = con.cursor()
+
+# Execute the SQL query to get old people (age >= 50)
+cur.execute("SELECT name, age FROM people WHERE age >= 50")
+
+# Fetch all query results
+query_results = cur.fetchall()
+
+# Print name and age of each old person
+for person in query_results:
+    name, age = person
+    print(f"{name} is {age} years old.")
+
+# Create a DataFrame from the query results
+df = pd.DataFrame(query_results, columns=['Name', 'Age'])
+
+# Save the DataFrame to a CSV file
+df.to_csv('old_people.csv', index=False)
+
+# Close the connection
+con.close()

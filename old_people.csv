@@ -1,5 +1,4 @@
-# LAB7
- import sqlite3
+import sqlite3
 from faker import Faker
 from datetime import datetime
 
@@ -49,4 +48,3 @@ for _ in range(200):
 # Commit the changes and close the connection
 con.commit()
 con.close()
-
