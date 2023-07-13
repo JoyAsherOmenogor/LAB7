@@ -1,62 +1,314 @@
-"""
-Description:
-Prints the name and age of all people in the Social Network database
-who are age 50 or older, and saves the information to a CSV file.
-
-Usage:
-python old_people.py
-"""
-
-import os
-import sqlite3
-import pandas as pd
-from create_db import db_path, script_dir
-
-def main():
-    old_people_list = get_old_people()
-    print_name_and_age(old_people_list)
-
-    old_people_csv = os.path.join(script_dir, 'old_people.csv')
-    save_name_and_age_to_csv(old_people_list, old_people_csv)
-
-def get_old_people():
-    """Queries the Social Network database for all people who are at least 50 years old.
-
-    Returns:
-        list: (name, age) of old people 
-    """
-    con = sqlite3.connect(db_path)
-    cur = con.cursor()
-
-    # Execute the SQL query to get old people (age >= 50)
-    cur.execute("SELECT name, age FROM people WHERE age >= 50")
-
-    # Fetch all query results
-    old_people_list = cur.fetchall()
-
-    con.close()
-
-    return old_people_list
-
-def print_name_and_age(name_and_age_list):
-    """Prints name and age of all people in provided list
-
-    Args:
-        name_and_age_list (list): (name, age) of people
-    """
-    for person in name_and_age_list:
-        name, age = person
-        print(f"{name} is {age} years old.")
-
-def save_name_and_age_to_csv(name_and_age_list, csv_path):
-    """Saves name and age of all people in provided list
-
-    Args:
-        name_and_age_list (list): (name, age) of people
-        csv_path (str): Path of CSV file
-    """
-    df = pd.DataFrame(name_and_age_list, columns=['Name', 'Age'])
-    df.to_csv(csv_path, index=False)
-
-if __name__ == '__main__':
-   main()
+Name,Age
+Elizabeth Williams,55
+Chris Valdez,63
+Brian Lopez,92
+Michael Lopez MD,74
+Kimberly Sheppard,54
+Donald Keller,66
+Emily Lawson,61
+Jessica Farrell,74
+Jeffrey Wells,87
+Lisa Johnson,82
+Donna Zavala,100
+Alexis Allen,78
+Stephen Hawkins,73
+Emma Stein,74
+Roberta Little,99
+Jose Palmer,92
+Kevin Wright DDS,71
+Maria Dean,94
+Bruce Graham,67
+Gilbert Bailey,77
+Michelle Jenkins,98
+Jill Meyer,97
+Angela Gates,97
+Cynthia Cervantes,92
+Michael Koch,64
+Troy Frank,66
+Brian Nichols,75
+George Wilson,67
+Morgan Jenkins,50
+Candice French,63
+Courtney Evans,56
+Crystal Jensen,84
+Eric Turner,89
+Kellie Richardson,74
+Melissa Roberts,64
+Travis Garrett,96
+Vanessa Holland,51
+Brandon Burgess,97
+David Roman,89
+Jerry King,72
+Ivan Wood,98
+Max Hill,90
+David Woodward PhD,81
+Janet Williams,56
+William Mcintyre,77
+Brian Phillips,77
+Dawn Bennett,87
+Heather Gonzales,97
+Kathy Bush,77
+Keith Zuniga,64
+Derek Joyce,69
+Tricia Gaines,62
+Robert Garcia,66
+Patrick Brandt,54
+Eddie Thompson,87
+Becky Delgado,76
+Alicia Collins,50
+Calvin Saunders,65
+Steven Brown,69
+Joseph Washington,64
+Mrs. Jennifer Ayala,59
+Joshua Larson,94
+Jennifer Kelley,58
+Michelle Friedman,62
+Virginia Ward,88
+Chelsea Mitchell,85
+Dylan Hudson,65
+Emily Coleman,67
+Janet Ramos,94
+William Martinez,93
+Holly Burke,65
+Justin Wilson,90
+Anna Gordon,83
+Michelle Fitzgerald,54
+Susan Horton,66
+Brooke Martin,53
+Trevor Collins,61
+Jennifer House,89
+Derrick Stephens,84
+Elizabeth Harris,54
+Jeffrey Mcintyre,91
+Randall Silva PhD,58
+Marie Humphrey,98
+Jerry Barton,80
+Charles Martinez,78
+Jennifer Richardson,68
+Antonio Hayes,84
+Joel Mills,61
+Christine Reid,73
+Trevor Harrison,61
+Scott Sloan,77
+Vanessa Jordan,74
+Donald Stewart,71
+Melinda Williams,72
+Jessica Myers,50
+Barbara Rivera,85
+Amber Bowman,62
+Patricia Watson,83
+Madison Parrish,82
+Tina Summers,79
+Sandra Mccarthy,85
+Allen Jackson,65
+Dennis Walker,95
+Gina Garcia,92
+Raymond Jones,86
+Craig Washington,74
+Mary Clark,94
+Anthony Cardenas,83
+Ashley Warren,76
+Mary Ochoa,88
+Ruth Martin,54
+Brenda Ramos,54
+Jennifer Davies,54
+Matthew Gregory,95
+Patricia Herrera,69
+Joanna Young,82
+Katie Brooks,58
+Craig Swanson,86
+Joseph Bass,76
+Jennifer Walsh,63
+Mary Morris,52
+Brandon Wolfe,53
+Veronica Duncan,99
+Michael Ashley,81
+Anthony Haley,83
+Kelsey Daugherty,100
+Christy Ward,94
+Christina Davis,86
+Melissa Torres,60
+Tanya Hernandez,94
+Jeremy Johnson,96
+Thomas Hickman,86
+Michael Nash,80
+Grace Chapman,56
+Kayla Leonard,90
+Susan Kelly,88
+Dr. Logan Nunez,66
+George Williams,72
+Valerie Lyons,54
+Richard Smith,68
+Scott Perez,50
+Trevor Gardner,98
+Linda Bailey,92
+Robert Williams,56
+Jennifer Murphy,75
+Megan Williamson,97
+Chad Snow,65
+Tammy Dunn DDS,83
+Cody Alexander,92
+Carolyn Williams,55
+Joanna Lopez,72
+Samantha Alvarez,58
+Randy Smith,95
+Chad Ford,55
+Robert Gallegos,94
+Adam Richardson,96
+Frederick Duffy,63
+Cameron Scott,57
+Tina Lindsey,74
+Misty Harris,95
+Tyler Hammond,67
+Jennifer Parsons,70
+Sean Brown,65
+David Hernandez,58
+Jennifer Gonzales MD,53
+Sean Stuart,57
+Emily Nunez,84
+Debbie Byrd,53
+Scott Lam,78
+Kayla Murphy,70
+William Sanchez,52
+Jeffrey Brown,87
+Jennifer Aguilar,87
+Mary Ryan,63
+Kelly Taylor,78
+Erin Martinez DDS,81
+Cory Guzman,75
+Anthony Herrera,64
+Dawn Durham,86
+Jenna Rivera,64
+James Thomas,59
+Adam Chambers,85
+Sarah Byrd,100
+Emily Lynch,65
+Brian Turner,52
+Claire Johnson,98
+Cynthia Smith,71
+Mary Blake,91
+Pamela Hall,83
+Michael Davenport,62
+Lori Hernandez,86
+Michael Alexander,69
+Miguel Bryant,50
+Steven Landry,55
+Edward Myers,94
+Linda Hernandez,77
+Breanna Murphy,62
+Sarah Ferguson,73
+Kimberly Smith,67
+Lori Young,100
+Rebecca Castaneda,89
+Julia Johnson,64
+Sandy Robinson,95
+Andrew Allen,60
+Cheyenne Meyers,59
+Michael Lee,62
+Danielle Santana,98
+Emma Fletcher,63
+Andrew Mooney,66
+Pamela Wallace,100
+Kristie Quinn,89
+Gary Roberts,84
+Kirk Rodriguez,88
+Richard Johnson,71
+William Jones,87
+Alyssa Ruiz,62
+Kelly Love,91
+Emily Williams,83
+Frank Medina,61
+John Miller,94
+Martin Garcia,61
+Christine Brown MD,52
+Ronald Thompson,100
+Morgan Goodman,89
+Joseph Brooks,62
+Michele Cannon,81
+Ashley Baker,54
+Catherine Robinson,96
+Jennifer Martin,69
+Elizabeth Cunningham,58
+Julia Rodriguez,100
+Thomas Davis,50
+Anthony Richards,84
+Albert Harrell,73
+Jocelyn Hudson,95
+George Torres,62
+Nicole Schmidt,79
+Eric Hunter,67
+Allison Brown,87
+Mitchell Martinez,100
+Kyle Henry,67
+Daniel Hamilton,81
+James Rush,94
+Brandon Faulkner,94
+Ian Morales,61
+Gregory Taylor,66
+Phillip Wright,93
+Monica Lopez,73
+Andrew Lee,85
+Aaron Hodge,59
+Wanda Henderson,74
+Mark Walsh,100
+Michael Leon,87
+Brent Powell,92
+Megan Johnson,90
+David Ibarra,70
+Jonathan Myers,88
+Sheri Hays,93
+Amy Parker,74
+Ellen Watson,54
+Lori Madden,54
+Erik Little,100
+Nicole Townsend,75
+Mary Weeks,65
+Meagan Smith,72
+Melissa Long,55
+Andre Taylor,82
+Scott Santos,94
+Justin Wells,76
+Theresa Conway,61
+Michael Fuller,58
+Rachel Johnson,69
+Michael Andrews,75
+Kristi Jensen,62
+Justin Barber,70
+Amy Chavez,60
+Tara Dean,98
+Brianna Ferguson,76
+Tina Olson,68
+Leslie Vargas,72
+Michael Davis,72
+Jeanette Smith,55
+Gabrielle Middleton,58
+Raymond Salinas,83
+Danielle Bell,95
+Robert Ellison,70
+Kevin Zavala,63
+Lauren Wilson,75
+Sharon Wright,72
+Kevin Barton,91
+Tony Gonzalez,61
+Erin Cox,90
+Denise Howell,50
+Dawn Suarez,98
+Joseph Lewis,57
+Jesse Guzman,95
+Joel Bishop,80
+Peter Wise,65
+Brian Gilbert,57
+David Williams,64
+Kelly Gates,90
+William Moore,77
+Ann Johnson,84
+Shelly Robinson,57
+Tiffany Hansen,93
+Timothy Wilson,78
+Jason Kennedy,66
+Darren Gibbs,86
+Abigail Mitchell,79
+Chad Jones,53
+Kimberly Sanders,67
+Jasmine Fernandez,88
+Ronald Richmond,53
